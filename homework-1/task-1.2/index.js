@@ -27,18 +27,6 @@ fs.readdir(csvFolder, function (err, files) {
     });
 });
 
-function convertFileLineByLine(csvFile, resultFile) {
-    let readStream = fs.createReadStream(csvFile);
-    let writeStream = fs.createWriteStream(resultFile);
-
-    pipeline(readStream, csv(), writeStream, 
-    (err) => {
-        if (err) {
-          console.error(err);
-        } 
-    });
-}
-
 function convertWholeFile(csvFile, resultFile) {
     let readStream = fs.createReadStream(csvFile);
     let fileContent = [];
@@ -56,7 +44,7 @@ function convertWholeFile(csvFile, resultFile) {
         })
         .fromString(fileContent.toString())
         .then((json) => {
-            let transformed = transformJson(json);
+            let transformed = transformArray(json);
 
             let writeStream = fs.createWriteStream(resultFile);
             writeStream.on('error', (error) => {
@@ -67,14 +55,39 @@ function convertWholeFile(csvFile, resultFile) {
     });       
 }
 
-function transformJson(json){
-    let result = '';
+function convertFileLineByLine(csvFile, resultFile) {
+    let readStream = fs.createReadStream(csvFile);
+    let writeStream = fs.createWriteStream(resultFile);
+
+    pipeline(readStream,
+        csv().subscribe((jsonObj,index) =>
+        {
+            transformJson(jsonObj);
+        }),
+        writeStream, 
+        (err) => {
+            if (err) {
+            console.error(err);
+            } 
+        });
+}
+
+function transformArray(json){
+    let result = '';    
     json.forEach(item => {
+        transformJson(item);
         result += JSON.stringify(item) + '\n';
     });
     return result;
 }
 
+function transformJson(json){
+    Object.entries(json)
+    .reduce((t, [key, value]) => {  
+        json[key.toLowerCase()] = value;
+        delete json[key];
+    }, {});
+}
 
 function chechResultFolder(resultFolder) {
     try {
