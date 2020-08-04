@@ -3,17 +3,16 @@ import csv from 'csvtojson';
 import path from 'path';
 import { pipeline } from 'stream';
 
-const csvFolder = './csv';
-const resultFolder = './result-whole';
-const resultLineByLineFolder = './result-line-by-line';
-
+const csvFolder = path.join('.', 'csv');
+const resultFolder = path.join('.', 'result-whole');
+const resultLineByLineFolder = path.join('.', 'result-line-by-line');
 
 chechResultFolder(resultFolder);
 chechResultFolder(resultLineByLineFolder);
 
 fs.readdir(csvFolder, function (err, files) {
     if (err) {
-        return console.log(`Unable to scan directory: ${err}`);
+        return console.error(`Unable to scan directory: ${err}`);
     } 
     files.forEach(function (file) {
         console.log(`Converting file ${file}`); 
@@ -42,13 +41,13 @@ function convertWholeFile(csvFile, resultFile) {
         .then((json) => {
             let transformed = transformArray(json);
 
-            let writeStream = fs.createWriteStream(resultFile);
-            writeStream.on('error', (error) => {
-                console.log(`Write error ${error}`);
-            });  
-            writeStream.write(transformed);
+            fs.writeFile(resultFile, transformed, (err) => {
+                if(err){
+                    console.error(`Write error ${err}`);
+                }
+            });
         });
-    });
+    });     
 }
 
 function convertFileLineByLine(csvFile, resultFile) {
@@ -63,7 +62,7 @@ function convertFileLineByLine(csvFile, resultFile) {
         writeStream, 
         (err) => {
             if (err) {
-                console.error(err);
+            console.error(err);
             } 
         });
 }
