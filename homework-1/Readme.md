@@ -1,4 +1,4 @@
-# Homework 1
+# BASICS. NODEJS FUNDAMENTAL THEORY
 
 ## Task 1.1
 

@@ -29,21 +29,16 @@ fs.readdir(csvFolder, function (err, files) {
 });
 
 function convertWholeFile(csvFile, resultFile) {
-    let readStream = fs.createReadStream(csvFile);
-    let fileContent = [];
+    fs.readFile(csvFile, (err, data) =>{
+        if(err){
+            return console.error(`Read error: ${error}`);
+        }
 
-    readStream.on('data', (chunk) => {
-        fileContent.push(chunk);        
-    })
-    .on('error', (error) => {
-        console.log(`Read error: ${error}`);
-    })
-    .on('end', () => {
         csv()
         .on('error', (error) => {
             console.log(`Conversion error: ${error}`);
         })
-        .fromString(fileContent.toString())
+        .fromString(data.toString())
         .then((json) => {
             let transformed = transformArray(json);
 
@@ -52,8 +47,8 @@ function convertWholeFile(csvFile, resultFile) {
                 console.log(`Write error ${error}`);
             });  
             writeStream.write(transformed);
-        }); 
-    });       
+        });
+    });
 }
 
 function convertFileLineByLine(csvFile, resultFile) {
@@ -68,7 +63,7 @@ function convertFileLineByLine(csvFile, resultFile) {
         writeStream, 
         (err) => {
             if (err) {
-            console.error(err);
+                console.error(err);
             } 
         });
 }
