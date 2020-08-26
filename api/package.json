@@ -6,8 +6,8 @@
   "scripts": {
     "tsc": "tsc",
     "task": "tsc && node ./build/app.js",
-    "dev": "eslint . --ext .ts && nodemon --exec ts-node-dev --respawn --transpileOnly ./src/app.ts",
-    "lint": "eslint . --ext .ts"
+    "eslint": "eslint . --ext .ts",
+    "dev": "eslint && nodemon --exec ts-node-dev --respawn --transpileOnly ./src/app.ts"
   },
   "license": "ISC",
   "devDependencies": {
@@ -19,7 +19,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.6.0",
     "nodemon": "2.0.4",
-    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.0.0-pre.60",
     "typescript": "^3.9.7"
   },
   "dependencies": {

@@ -1,6 +1,6 @@
 import express from 'express';
 import { ContainerTypes, ExpressJoiError } from 'express-joi-validation';
-import router from './api/users';
+import router from './routers/users';
 
 const app: express.Application = express();
 

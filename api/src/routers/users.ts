@@ -18,10 +18,10 @@ router.get('/:id', (req, res) => {
     }
 });
 
-router.get('/auto-suggest/:login', (req, res) => {
+router.get('/auto-suggest/:loginSubstring', (req, res) => {
     const limit = req.query.limit ? parseInt(req.query.limit.toString(), 10) : 10;
     const filtered = Array.from(users.values())
-        .filter(({ login }) => login?.includes(req.params.login.toString()))
+        .filter(({ login }) => login?.includes(req.params.loginSubstring.toString()))
         .slice(0, limit);
     res.json(filtered);
 });
