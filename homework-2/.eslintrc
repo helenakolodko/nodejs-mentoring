@@ -26,7 +26,7 @@
             "restParams": true,
             "spread": true,
             "superInFunctions": true,
-            "templateStrings": true,
+            "templateStrings": true
         }
     },
     "rules": {
@@ -224,8 +224,7 @@
             4,
             {
                 "ignoreUrls": true,
-                "ignoreComments": false,
-                "ignorePattern": "^\\s*(const|let|var)\\s+\\w+\\s+\\=\\s+\\/.*\\/(|i|g|m|ig|im|gm|igm);?$"
+                "ignoreComments": false
             }
         ],
         "max-nested-callbacks": [

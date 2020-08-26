@@ -6,7 +6,7 @@ Write a simple **REST** service with **CRUD** operations for User entity.
 To create **REST** service, use **ExpressJS** (https://expressjs.com/).
 The User should have the following properties (you can use **UUID** as a user identifier (`id`)):
 
-```javascript
+```typescript
 type User = {
     id: string;
     login: string;
