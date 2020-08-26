@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "tsc",
     "task": "tsc && node ./build/app.js",
-    "dev": "nodemon ts-node-dev --respawn --transpileOnly ./src/app.ts",
+    "dev": "eslint . --ext .ts && nodemon --exec ts-node-dev --respawn --transpileOnly ./src/app.ts",
     "lint": "eslint . --ext .ts"
   },
   "license": "ISC",
@@ -19,6 +19,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.6.0",
     "nodemon": "2.0.4",
+    "ts-node": "^9.0.0",
     "typescript": "^3.9.7"
   },
   "dependencies": {

@@ -10,8 +10,8 @@ const userSchema = Joi
             .required()
             .regex(/(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)/)
             .messages({
-                'string.pattern.base': `"password" must contain letters and numbers`,
-              }),
+                'string.pattern.base': '"password" must contain letters and numbers'
+            }),
         age: Joi.number()
             .required()
             .min(4)
