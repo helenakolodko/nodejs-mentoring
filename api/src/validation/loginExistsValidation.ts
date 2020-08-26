@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import type { User } from '../types/user';
+import UserService from '../services/users';
 
-const loginExistsValidation = (users: Map<string, User>) => {
+const loginExistsValidation = () => {
     return (req: Request, res: Response, next: NextFunction) => {
-        const logins = Array.from(users.values()).map(({ login }) => login);
+        const logins = UserService.allLogins();
 
         if (logins.includes(req.body.login)) {
             res.status(400)

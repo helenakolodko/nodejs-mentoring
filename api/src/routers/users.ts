@@ -1,16 +1,15 @@
 import express from 'express';
-import type { User } from '../types/user';
+import UserService from '../services/users';
 import userSchema from '../validation/userSchema';
 import loginExistsValidation from '../validation/loginExistsValidation';
 
 const validator = require('express-joi-validation').createValidator({});
 const router: express.Router = express.Router();
-const users: Map<string, User> = new Map();
 
-router.get('/', (req, res) => res.json(Array.from(users.values())));
+router.get('/', (req, res) => res.json(UserService.all()));
 
 router.get('/:id', (req, res) => {
-    const user = users.get(req.params.id);
+    const user = UserService.getById(req.params.id);
     if (user) {
         res.json(user);
     } else {
@@ -20,18 +19,16 @@ router.get('/:id', (req, res) => {
 
 router.get('/auto-suggest/:loginSubstring', (req, res) => {
     const limit = req.query.limit ? parseInt(req.query.limit.toString(), 10) : 10;
-    const filtered = Array.from(users.values())
-        .filter(({ login }) => login?.includes(req.params.loginSubstring.toString()))
-        .slice(0, limit);
-    res.json(filtered);
+    console.log(req.query.limit, req.params.loginSubstring);
+    res.json(UserService.getAutoSuggestUsers(req.params.loginSubstring.toString(), limit));
 });
 
 router.post('/',
     validator.body(userSchema),
-    loginExistsValidation(users),
+    loginExistsValidation(),
     (req, res) => {
         console.log(req.body);
-        users.set(req.body.id, req.body);
+        UserService.newUser(req.body);
         res.sendStatus(200);
     }
 );
@@ -39,9 +36,9 @@ router.post('/',
 router.put('/:id',
     validator.body(userSchema),
     (req, res) => {
-        const user = users.get(req.params.id);
+        const user = UserService.getById(req.params.id);
         if (user) {
-            users.set(req.params.id, req.body);
+            UserService.update(req.body);
             res.sendStatus(200);
         } else {
             res.sendStatus(404);
@@ -50,9 +47,9 @@ router.put('/:id',
 );
 
 router.delete('/:id', (req, res) => {
-    const user = users.get(req.params.id);
+    const user = UserService.getById(req.params.id);
     if (user) {
-        users.set(req.params.id, { ...user, isDeleted: true });
+        UserService.softDelete(user);
         res.sendStatus(200);
     } else {
         res.sendStatus(404);
