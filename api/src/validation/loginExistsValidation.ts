@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import UserService from '../services/users';
+import {UserService} from '../entities/user/user.service';
 
-const loginExistsValidation = () => {
-    return (req: Request, res: Response, next: NextFunction) => {
-        const logins = UserService.allLogins();
+const loginExistsValidation = (userService: UserService) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const logins = await userService.allLogins();
 
         if (logins.includes(req.body.login)) {
             res.status(400)
-                .json(`User with this login '${req.body.login}' already exists.`);
+                .json(`User with login '${req.body.login}' already exists.`);
         } else {
             return next();
         }

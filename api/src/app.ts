@@ -1,6 +1,6 @@
 import express from 'express';
 import { ContainerTypes, ExpressJoiError } from 'express-joi-validation';
-import router from './routers/users';
+import router from './entities/user/user.routes';
 
 const app: express.Application = express();
 
@@ -18,6 +18,6 @@ app.use((err: any | ExpressJoiError, req: express.Request, res: express.Response
         const e: ExpressJoiError = err;
         res.status(400).end(`You submitted a bad ${e.type} paramater`);
     } else {
-        return next(err);
+        next(err);
     }
 });
