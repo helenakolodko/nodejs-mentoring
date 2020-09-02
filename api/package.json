@@ -7,7 +7,7 @@
     "tsc": "tsc",
     "task": "tsc && node ./build/app.js",
     "eslint": "eslint . --ext .ts",
-    "dev": "eslint && nodemon --exec ts-node-dev --respawn --transpileOnly ./src/app.ts"
+    "dev": "eslint && nodemon ./src/app.ts"
   },
   "license": "ISC",
   "devDependencies": {
@@ -26,7 +26,9 @@
     "@hapi/joi": "^17.1.1",
     "@types/express": "^4.17.7",
     "@types/joi": "^14.3.4",
+    "@types/uuid": "^8.3.0",
     "express": "^4.17.1",
-    "express-joi-validation": "^4.0.4-beta.0"
+    "express-joi-validation": "^4.0.4-beta.0",
+    "uuid": "^8.3.0"
   }
 }
