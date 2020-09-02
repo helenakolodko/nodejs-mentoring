@@ -1,7 +1,7 @@
 import { UserService } from './user.service';
 import { Request, Response, NextFunction } from 'express';
 import { v4 as uuid } from 'uuid';
-import { User } from './user.interface';
+import { UserInterface } from './user.interface';
 
 export class UserController {
     userService: UserService;
@@ -35,7 +35,7 @@ export class UserController {
     }
 
     createUser = async (req: Request, res: Response, next: NextFunction) => {
-        const user: User = {
+        const user: UserInterface = {
             ...req.body,
             id: uuid(),
             isDeleted: false
