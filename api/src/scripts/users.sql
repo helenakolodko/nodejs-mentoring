@@ -1,6 +1,8 @@
 -- Table: public.users
 
 -- DROP TABLE public.users;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 
 CREATE TABLE public.users
 (
