@@ -3,6 +3,7 @@ const Joi = require('@hapi/joi');
 const userSchema = Joi
     .object({
         id: Joi.string()
+            .guid({ version : 'uuidv4' })
             .required(),
         login: Joi.string()
             .required(),

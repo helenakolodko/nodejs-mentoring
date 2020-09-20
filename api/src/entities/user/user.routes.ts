@@ -6,8 +6,8 @@ import loginExistsValidation from '../../validation/loginExistsValidation';
 
 const userService = new UserService();
 const controller = new UserController(userService);
-
 const validator = require('express-joi-validation').createValidator({});
+
 const router: express.Router = express.Router();
 
 router.get('/', controller.getAll);

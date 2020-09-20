@@ -1,8 +1,13 @@
-import { Sequelize, Model, DataTypes } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
+import { Connection } from '../postgresConnection';
 
-const sequelize = new Sequelize('postgres://postgres:123@localhost:5432/mentoring');
-
-export class User extends Model {}
+class User extends Model {
+    public id!: string;
+    public login!: string;
+    public password!: string;
+    public age!: number;
+    public isDeleted?: boolean;
+}
 
 User.init(
     {
@@ -26,12 +31,18 @@ User.init(
         },
         isDeleted: {
             allowNull: false,
+            defaultValue: false,
+            field: 'is_deleted',
             type: DataTypes.BOOLEAN
         }
-    }, {
-        sequelize,
+    }, 
+    {
+        sequelize: Connection,
         timestamps: false,
         schema: 'public',
-        modelName: 'user'
+        tableName: 'users',
+        modelName: 'User'
     }
 );
+
+export default User;

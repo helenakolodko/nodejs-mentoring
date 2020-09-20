@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import type { UserInterface } from './user.interface';
-import { User } from './user.model';
+import { User, UserGroup } from '../../db/models';
+import { Connection } from '../../db/postgresConnection';
 
 export class UserService {
 
@@ -49,14 +50,14 @@ export class UserService {
     }
 
     softDelete = async (user: UserInterface) => {
-        const deleted = await User.update({ isDeleted: true }, {
-            where: {
-                id: user.id
-            }
+        Connection.transaction(async transaction => {
+            await User.update({ isDeleted: true }, { where: { id: user.id }, transaction });
+            await UserGroup.destroy({ where: { userId: user.id }, transaction });
         });
     }
 
     private toUserInterface(user: User): UserInterface {
         return <UserInterface>user.toJSON();
+
     }
 }

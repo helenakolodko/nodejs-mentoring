@@ -14,9 +14,26 @@ CREATE TABLE public.users
     CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 
+CREATE TABLE public.groups
+(
+    id uuid NOT NULL,
+    name character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    permissions character varying[] COLLATE pg_catalog."default",
+    CONSTRAINT groups_pkey PRIMARY KEY (id)
+)
+
+CREATE TABLE public.user_groups
+(
+    "userId" uuid NOT NULL,
+    "groupId" uuid NOT NULL,
+    CONSTRAINT user_group_pkey PRIMARY KEY ("userId", "groupId")
+)
+
 TABLESPACE pg_default;
 
 ALTER TABLE public.users
+    OWNER to postgres;
+ALTER TABLE public.groups
     OWNER to postgres;
 	
 INSERT INTO users (id, login, password, age, "isDeleted") VALUES (uuid_generate_v4(),'BruceS', 'password1', 45, false);
@@ -24,3 +41,7 @@ INSERT INTO users (id, login, password, age, "isDeleted") VALUES (uuid_generate_
 INSERT INTO users (id, login, password, age, "isDeleted") VALUES (uuid_generate_v4(),'SFender ', 'password3', 23, false);             
 INSERT INTO users (id, login, password, age, "isDeleted") VALUES (uuid_generate_v4(), 'DavidG', 'password4', 12, false);
 INSERT INTO users (id, login, password, age, "isDeleted") VALUES (uuid_generate_v4(), 'JBonham', 'password5', 32, false);
+
+
+INSERT INTO public.groups(id, name, permissions) VALUES (uuid_generate_v4(), 'test', ARRAY['READ', 'WRITE']);
+INSERT INTO public.groups(id, name, permissions) VALUES (uuid_generate_v4(), 'test1', ARRAY['READ']);
