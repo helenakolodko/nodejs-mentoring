@@ -10,7 +10,7 @@ CREATE TABLE public.users
     login character varying(50) COLLATE pg_catalog."default" NOT NULL,
     password character varying(50) COLLATE pg_catalog."default" NOT NULL,
     age integer NOT NULL,
-    "isDeleted" boolean NOT NULL,
+    is_deleted boolean NOT NULL,
     CONSTRAINT users_pkey PRIMARY KEY (id)
 )
 
@@ -24,9 +24,9 @@ CREATE TABLE public.groups
 
 CREATE TABLE public.user_groups
 (
-    "userId" uuid NOT NULL,
-    "groupId" uuid NOT NULL,
-    CONSTRAINT user_group_pkey PRIMARY KEY ("userId", "groupId")
+    user_id uuid NOT NULL,
+    group_id uuid NOT NULL,
+    CONSTRAINT user_group_pkey PRIMARY KEY (user_id, group_id)
 )
 
 TABLESPACE pg_default;
@@ -36,11 +36,11 @@ ALTER TABLE public.users
 ALTER TABLE public.groups
     OWNER to postgres;
 	
-INSERT INTO users (id, login, password, age, "isDeleted") VALUES (uuid_generate_v4(),'BruceS', 'password1', 45, false);
-INSERT INTO users (id, login, password, age, "isDeleted") VALUES (uuid_generate_v4(), 'RobertP', 'password2', 57, false);
-INSERT INTO users (id, login, password, age, "isDeleted") VALUES (uuid_generate_v4(),'SFender ', 'password3', 23, false);             
-INSERT INTO users (id, login, password, age, "isDeleted") VALUES (uuid_generate_v4(), 'DavidG', 'password4', 12, false);
-INSERT INTO users (id, login, password, age, "isDeleted") VALUES (uuid_generate_v4(), 'JBonham', 'password5', 32, false);
+INSERT INTO users (id, login, password, age, is_deleted) VALUES (uuid_generate_v4(),'BruceS', 'password1', 45, false);
+INSERT INTO users (id, login, password, age, is_deleted) VALUES (uuid_generate_v4(), 'RobertP', 'password2', 57, false);
+INSERT INTO users (id, login, password, age, is_deleted) VALUES (uuid_generate_v4(),'SFender ', 'password3', 23, false);             
+INSERT INTO users (id, login, password, age, is_deleted) VALUES (uuid_generate_v4(), 'DavidG', 'password4', 12, false);
+INSERT INTO users (id, login, password, age, is_deleted) VALUES (uuid_generate_v4(), 'JBonham', 'password5', 32, false);
 
 
 INSERT INTO public.groups(id, name, permissions) VALUES (uuid_generate_v4(), 'test', ARRAY['READ', 'WRITE']);
