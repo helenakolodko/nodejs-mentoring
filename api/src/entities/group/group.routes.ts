@@ -25,7 +25,7 @@ router.put('/:id',
     controller.updateGroup
 );
 
-router.post('/users/:id',
+router.post('/:id/addUsers/',
     controller.addUsers
 );
 
