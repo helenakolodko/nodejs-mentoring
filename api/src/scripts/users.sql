@@ -1,6 +1,7 @@
--- Table: public.users
-
 -- DROP TABLE public.users;
+-- DROP TABLE public.groups;
+-- DROP TABLE public.user_groups;
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 
@@ -24,8 +25,8 @@ CREATE TABLE public.groups
 
 CREATE TABLE public.user_groups
 (
-    user_id uuid NOT NULL,
-    group_id uuid NOT NULL,
+    user_id uuid NOT NULL REFERENCES public.users ON DELETE CASCADE,
+    group_id uuid NOT NULL REFERENCES public.groups ON DELETE CASCADE,
     CONSTRAINT user_group_pkey PRIMARY KEY (user_id, group_id)
 )
 
