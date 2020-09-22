@@ -22,9 +22,6 @@ export const userCreateSchema = Joi
 
 export const userUpdateSchema = Joi
     .object({
-        id: Joi.string()
-            .guid({ version: 'uuidv4' })
-            .required(),
         login: Joi.string()
             .required(),
         password: Joi.string()

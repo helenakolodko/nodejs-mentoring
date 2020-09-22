@@ -58,7 +58,11 @@ export class GroupController {
         try {
             const group = await this.groupService.getById(id);
             if (group) {
-                await this.groupService.update(req.body);
+                const groupUpdated: GroupInterface = {
+                    ...req.body,
+                    id: id
+                }
+                await this.groupService.update(groupUpdated);
                 res.sendStatus(200);
             } else {
                 res.sendStatus(404);
