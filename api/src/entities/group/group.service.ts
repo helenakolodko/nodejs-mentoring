@@ -55,10 +55,7 @@ export class GroupService {
     }
 
     hardDelete = async (group: GroupInterface) => {
-        Connection.transaction(async transaction => {
-            await Group.destroy({ where: { id: group.id }, transaction });
-            await UserGroup.destroy({ where: { groupId: group.id }, transaction });
-        });
+        await Group.destroy({ where: { id: group.id } });
     }
 
     private toGroupInterface(group: Group): GroupInterface {
