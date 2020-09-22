@@ -1,11 +1,9 @@
 const Joi = require('@hapi/joi');
-import { Permission } from '../entities/group/group.interface';
 
-const userSchema = Joi
+export const groupCreateSchema = Joi
     .object({
         id: Joi.string()
-            .guid({ version : 'uuidv4' })
-            .required(),
+            .guid({ version: 'uuidv4' }),
         name: Joi.string()
             .required(),
         permissions: Joi.array()
@@ -13,4 +11,14 @@ const userSchema = Joi
                 .valid('READ', 'WRITE', 'DELETE', 'SHARE', 'UPLOAD_FILES'))
     });
 
-export default userSchema;
+export const groupUpdateSchema = Joi
+    .object({
+        id: Joi.string()
+            .guid({ version: 'uuidv4' })
+            .required(),
+        name: Joi.string()
+            .required(),
+        permissions: Joi.array()
+            .items(Joi.string()
+                .valid('READ', 'WRITE', 'DELETE', 'SHARE', 'UPLOAD_FILES'))
+    });

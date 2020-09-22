@@ -1,5 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
-import { Connection } from '../postgresConnection';
+import { Connection } from '../connections';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 class User extends Model {
     public id!: string;
@@ -39,7 +42,7 @@ User.init(
     {
         sequelize: Connection,
         timestamps: false,
-        schema: 'public',
+        schema:  process.env.DB_SCHEMA_NAME || 'public',
         tableName: 'users',
         modelName: 'User'
     }

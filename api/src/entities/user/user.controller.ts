@@ -53,8 +53,8 @@ export class UserController {
     createUser = async (req: Request, res: Response) => {
         try {
             const user: UserInterface = {
-                ...req.body,
                 id: uuid(),
+                ...req.body,
                 isDeleted: false
             }
             await this.userService.newUser(user);

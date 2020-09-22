@@ -3,13 +3,13 @@ import { ContainerTypes, ExpressJoiError } from 'express-joi-validation';
 import userRouter from './entities/user/user.routes';
 import groupRouter from './entities/group/group.routes';
 import dotenv from 'dotenv';
-import { Connection } from './db/postgresConnection';
+import { Connection } from './db/connections';
 
 dotenv.config();
 
 const app: express.Application = express();
 
-//Connection.sync();
+Connection.sync();
 app.listen(process.env.APP_PORT, () => {
     console.log('App listening on port 3000');
 });

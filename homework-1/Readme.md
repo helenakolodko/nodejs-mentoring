@@ -24,3 +24,9 @@ line).
 ## Task 1.3
 
 Rewrite the above-mentioned programs to use **babel** (https://babeljs.io/) and **ES6** modules.
+
+# To test the solution
+
+- fill `.env` file with your DB credentials
+- run SQL script `api\src\scripts\users.sql` to create required tables
+- run `npm run task`

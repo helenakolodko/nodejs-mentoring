@@ -40,8 +40,8 @@ export class GroupController {
     createGroup = async (req: Request, res: Response) => {
         try {
             const group: GroupInterface = {
-                ...req.body,
                 id: uuid(),
+                ...req.body,
                 isDeleted: false
             }
             await this.groupService.newGroup(group);
@@ -72,10 +72,10 @@ export class GroupController {
 
     addUsers = async (req: Request, res: Response) => {
         const { id } = req.params;
-        const  userIds  = req.body;
+        const { userIds } = req.body;
         console.log('add users get');
-        try{
-           
+        try {
+
             const group = await this.groupService.getById(id);
             if (group) {
                 console.log('add users add');

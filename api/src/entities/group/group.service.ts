@@ -1,6 +1,6 @@
 import type { GroupInterface } from './group.interface';
 import { Group, UserGroup } from '../../db/models';
-import { Connection } from '../../db/postgresConnection';
+import { Connection } from '../../db/connections';
 
 export class GroupService {
 

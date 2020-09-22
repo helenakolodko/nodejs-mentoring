@@ -1,6 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
-import { Connection } from '../postgresConnection';
+import { Connection } from '../connections';
 import { Permission } from '../../entities/group/group.interface';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 class Group extends Model {
     public id!: string;
@@ -28,7 +31,7 @@ Group.init(
     {
         sequelize: Connection,
         timestamps: false,
-        schema: 'public',
+        schema:  process.env.DB_SCHEMA_NAME || 'public',
         tableName: 'groups',
         modelName: 'Group'
     }
