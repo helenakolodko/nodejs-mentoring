@@ -97,3 +97,10 @@ which users are assigned to which group.
 ## TASK 4.3
 
 Add `addUsersToGroup(groupId, userIds)` method which will allow adding users to a certain group. Use transactions to save records in DB.
+
+# To test the solution
+
+- run `npm i`
+- fill `.env` file with your DB credentials
+- run SQL script `api\src\scripts\users.sql` to create required tables
+- run `npm run task`
