@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import {UserService} from '../entities/user/user.service';
+import { UserService } from '../entities/user/user.service';
 
 const loginExistsValidation = (userService: UserService) => {
     return async (req: Request, res: Response, next: NextFunction) => {

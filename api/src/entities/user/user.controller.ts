@@ -53,8 +53,8 @@ export class UserController {
     createUser = async (req: Request, res: Response) => {
         try {
             const user: UserInterface = {
-                ...req.body,
                 id: uuid(),
+                ...req.body,
                 isDeleted: false
             }
             await this.userService.newUser(user);
@@ -71,7 +71,11 @@ export class UserController {
         try {
             const user = await this.userService.getById(id);
             if (user) {
-                await this.userService.update(req.body);
+                const userUpdated: UserInterface = {
+                    ...req.body,
+                    id: id
+                }
+                await this.userService.update(userUpdated);
                 res.sendStatus(200);
             } else {
                 res.sendStatus(404);
