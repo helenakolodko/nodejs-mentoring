@@ -6,7 +6,7 @@ export const methodCallsLog = (req: Request, res: Response, next: NextFunction) 
     const start = process.hrtime();
     res.on('finish', () => {
         const timePassed = process.hrtime(start);
-        logger.debug(`${req.method} ${req.originalUrl} took ${hrToMiliseconds(timePassed)} ms`);
+        logger.debug(`${req.method} ${req.originalUrl} ${JSON.stringify(req.body)} [${hrToMiliseconds(timePassed)} ms]`);
     });
     next();
 };

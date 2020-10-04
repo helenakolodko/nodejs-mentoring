@@ -10,21 +10,23 @@ import { methodCallsLog } from './middlewares/methodCallsLog';
 
 dotenv.config();
 
-process.on('uncaughtException', (err) =>  {
-    logger.error(err);
-    process.exit(1);
-});
-process.on('unhandledRejection', err => {
-    logger.error(err);
-});
+process
+    .on('uncaughtException', err => {
+        logger.error(err);
+    })
+    .on('unhandledRejection', err => {
+        logger.error(err);
+    });
 
 const app: express.Application = express();
 
-Connection.sync();
-
-app.listen(process.env.APP_PORT, () => {
-    console.log('App listening on port 3000');
-});
+Connection
+    .sync()
+    .then(() => {
+        app.listen(process.env.APP_PORT, () => {
+            logger.info(`App listening on port ${process.env.APP_PORT}`);
+        });
+    });
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
