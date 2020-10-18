@@ -10,18 +10,17 @@ export class UserController {
         this.userService = userService;
     }
 
-    getAll = async (req: Request, res: Response) => {
+    getAll = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const users = await this.userService.all();
             res.json(users);
         }
         catch (error) {
-            res.sendStatus(500);
-            console.error(`Failed to get users`, error);
+            next(error);
         }
     }
 
-    getById = async (req: Request, res: Response) => {
+    getById = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
             const user = await this.userService.getById(id);
@@ -32,12 +31,11 @@ export class UserController {
             }
         }
         catch (error) {
-            res.sendStatus(500);
-            console.error(`Failed to get user with id '${id}'`, error);
+            next(error);
         }
     }
 
-    getAutoSuggestUsers = async (req: Request, res: Response) => {
+    getAutoSuggestUsers = async (req: Request, res: Response, next: NextFunction) => {
         const limit = req.query.limit ? parseInt(req.query.limit.toString(), 10) : 10;
         const loginSubstring = req.params.loginSubstring;
         try {
@@ -45,12 +43,11 @@ export class UserController {
             res.json(users);
         }
         catch (error) {
-            res.sendStatus(500);
-            console.error(`Failed to get users by login substring '${loginSubstring}'`, error);
+            next(error);
         }
     }
 
-    createUser = async (req: Request, res: Response) => {
+    createUser = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const user: UserInterface = {
                 id: uuid(),
@@ -61,12 +58,11 @@ export class UserController {
             res.sendStatus(200);
         }
         catch (error) {
-            res.sendStatus(500);
-            console.error(`Failed to create user`, req.body, error);
+            next(error);
         }
     }
 
-    updateUser = async (req: Request, res: Response) => {
+    updateUser = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params
         try {
             const user = await this.userService.getById(id);
@@ -82,19 +78,23 @@ export class UserController {
             }
         }
         catch (error) {
-            res.sendStatus(500);
-            console.error(`Failed to update user`, req.body, error);
+            next(error);
         }
     }
 
-    deleteUser = async (req: Request, res: Response) => {
+    deleteUser = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params
-        const user = await this.userService.getById(id);
-        if (user) {
-            await this.userService.softDelete(user);
-            res.sendStatus(200);
-        } else {
-            res.sendStatus(404);
+        try {
+            const user = await this.userService.getById(id);
+            if (user) {
+                await this.userService.softDelete(user);
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(404);
+            }
+        }
+        catch (error) {
+            next(error);
         }
     }
 }

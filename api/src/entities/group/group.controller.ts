@@ -2,6 +2,7 @@ import { GroupService } from './group.service';
 import { Request, Response, NextFunction } from 'express';
 import { v4 as uuid } from 'uuid';
 import { GroupInterface } from './group.interface';
+import { noExtendLeft } from 'sequelize/types/lib/operators';
 
 export class GroupController {
     groupService: GroupService;
@@ -10,7 +11,7 @@ export class GroupController {
         this.groupService = groupService;
     }
 
-    getAll = async (req: Request, res: Response) => {
+    getAll = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const groups = await this.groupService.all();
             res.json(groups);
@@ -21,7 +22,7 @@ export class GroupController {
         }
     }
 
-    getById = async (req: Request, res: Response) => {
+    getById = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         try {
             const group = await this.groupService.getById(id);
@@ -32,12 +33,11 @@ export class GroupController {
             }
         }
         catch (error) {
-            res.sendStatus(500);
-            console.error(`Failed to get group with id '${id}'`, error);
+            next(error);
         }
     }
 
-    createGroup = async (req: Request, res: Response) => {
+    createGroup = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const group: GroupInterface = {
                 id: uuid(),
@@ -48,12 +48,11 @@ export class GroupController {
             res.sendStatus(200);
         }
         catch (error) {
-            res.sendStatus(500);
-            console.error(`Failed to create group`, req.body, error);
+            next(error);
         }
     }
 
-    updateGroup = async (req: Request, res: Response) => {
+    updateGroup = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params
         try {
             const group = await this.groupService.getById(id);
@@ -69,20 +68,16 @@ export class GroupController {
             }
         }
         catch (error) {
-            res.sendStatus(500);
-            console.error(`Failed to update group`, req.body, error);
+            next(error);
         }
     }
 
-    addUsers = async (req: Request, res: Response) => {
+    addUsers = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         const { userIds } = req.body;
-        console.log('add users get');
         try {
-
             const group = await this.groupService.getById(id);
             if (group) {
-                console.log('add users add');
                 await this.groupService.addUsers(id, userIds);
                 res.sendStatus(200);
             } else {
@@ -90,19 +85,23 @@ export class GroupController {
             }
         }
         catch (error) {
-            res.sendStatus(500);
-            console.error(`Failed to add users to group ${id}`, req.body, error);
+            next(error);
         }
     }
 
-    deleteGroup = async (req: Request, res: Response) => {
+    deleteGroup = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params
-        const group = await this.groupService.getById(id);
-        if (group) {
-            await this.groupService.hardDelete(group);
-            res.sendStatus(200);
-        } else {
-            res.sendStatus(404);
+        try {
+            const group = await this.groupService.getById(id);
+            if (group) {
+                await this.groupService.hardDelete(group);
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(404);
+            }
+        }
+        catch (error) {
+            next(error);
         }
     }
 }
