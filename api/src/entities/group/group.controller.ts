@@ -2,7 +2,6 @@ import { GroupService } from './group.service';
 import { Request, Response, NextFunction } from 'express';
 import { v4 as uuid } from 'uuid';
 import { GroupInterface } from './group.interface';
-import { noExtendLeft } from 'sequelize/types/lib/operators';
 
 export class GroupController {
     groupService: GroupService;

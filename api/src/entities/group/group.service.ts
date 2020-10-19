@@ -1,6 +1,7 @@
 import type { GroupInterface } from './group.interface';
 import { Group, UserGroup } from '../../db/models';
 import { Connection } from '../../db/connections';
+import { UserService } from '../user/user.service';
 
 export class GroupService {
 

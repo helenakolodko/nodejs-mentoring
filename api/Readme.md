@@ -120,9 +120,26 @@ Every method in the controllers should log the errors which should include the f
 - arguments which have been passed to the method;
 - error message.
 
+# JWT AUTHORIZATION AND CORS
+
+## TASK 6.1
+
+Add authorization to the already existing REST service.
+
+- Add `login(username, password)` method which should return JWT token.
+- Add a middleware which will proxy all the requests (except login) and check that HTTP Authorization header has the correct value of JWT token.
+- In case of the HTTP Authorization header is absent in the request, the middleware should stop further controller method execution and return HTTP `401` code (Unauthorized Error) and standard error message.
+- In case of HTTP Authorization header has invalid JWT token in the request, the middleware should return HTTP code `403` (Forbidden Error) and standard error message.
+
+## TASK 6.2
+
+Add **CORS middleware** to access service methods from WEB applications hosted on another domains (https://github.com/expressjs/cors).
+
+
 # To test the solution
 
 - run `npm i`
 - fill `.env` file with your DB credentials
 - run SQL script `api\src\scripts\users.sql` to create required tables
 - run `npm run task`
+
