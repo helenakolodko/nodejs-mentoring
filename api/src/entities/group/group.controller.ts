@@ -2,6 +2,7 @@ import { GroupService } from './group.service';
 import { Request, Response, NextFunction } from 'express';
 import { v4 as uuid } from 'uuid';
 import { GroupInterface } from './group.interface';
+import createError from 'http-errors';
 
 export class GroupController {
     groupService: GroupService;
@@ -16,8 +17,7 @@ export class GroupController {
             res.json(groups);
         }
         catch (error) {
-            res.sendStatus(500);
-            console.error(`Failed to get groups`, error);
+            next(createError(500, `Failed to get groups\n${error}`));
         }
     }
 
@@ -28,7 +28,7 @@ export class GroupController {
             if (group) {
                 res.json(group);
             } else {
-                res.sendStatus(404);
+                throw createError(404);
             }
         }
         catch (error) {
@@ -63,7 +63,7 @@ export class GroupController {
                 await this.groupService.update(groupUpdated);
                 res.sendStatus(200);
             } else {
-                res.sendStatus(404);
+                throw createError(404);
             }
         }
         catch (error) {
@@ -80,7 +80,7 @@ export class GroupController {
                 await this.groupService.addUsers(id, userIds);
                 res.sendStatus(200);
             } else {
-                res.sendStatus(404);
+                throw createError(404);
             }
         }
         catch (error) {
@@ -96,7 +96,7 @@ export class GroupController {
                 await this.groupService.hardDelete(group);
                 res.sendStatus(200);
             } else {
-                res.sendStatus(404);
+                throw createError(404);
             }
         }
         catch (error) {

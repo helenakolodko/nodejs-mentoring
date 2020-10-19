@@ -2,6 +2,7 @@ import { UserService } from './user.service';
 import { Request, Response, NextFunction } from 'express';
 import { v4 as uuid } from 'uuid';
 import { UserInterface } from './user.interface';
+import createError from 'http-errors';
 
 export class UserController {
     userService: UserService;
@@ -27,7 +28,7 @@ export class UserController {
             if (user) {
                 res.json(user);
             } else {
-                res.sendStatus(404);
+                throw createError(404);
             }
         }
         catch (error) {
@@ -74,7 +75,7 @@ export class UserController {
                 await this.userService.update(userUpdated);
                 res.sendStatus(200);
             } else {
-                res.sendStatus(404);
+                throw createError(404);
             }
         }
         catch (error) {
@@ -90,7 +91,7 @@ export class UserController {
                 await this.userService.softDelete(user);
                 res.sendStatus(200);
             } else {
-                res.sendStatus(404);
+                throw createError(404);
             }
         }
         catch (error) {

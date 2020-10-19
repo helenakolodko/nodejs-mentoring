@@ -15,8 +15,8 @@ export class UserService {
     }
 
     getByLoginPassword = async (username: string, password: string) => {
-        const user = await User.findOne({ where: { login: username, password: password } });
-        if (user != null) {
+        const user = await User.findOne({ where: { login: username } });
+        if (user != null && user.password == password) {
             return this.toUserInterface(user);
         }
         else {

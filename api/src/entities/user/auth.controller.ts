@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { UserService } from './user.service';
 import { signAccessToken } from '../../middlewares/jwt';
+import createError from 'http-errors';
 
 export class AuthController {
     userService: UserService;
@@ -17,7 +18,7 @@ export class AuthController {
                 const accessToken = signAccessToken(user.id);
                 res.send({ accessToken });
             } else {
-                res.status(403).end(`Invalid token`);
+                throw createError(403, `Invalid credentials`);
             }
         } catch (error) {
             return next(error);
