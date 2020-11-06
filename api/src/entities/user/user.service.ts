@@ -1,13 +1,22 @@
 import { Op } from 'sequelize';
 import type { UserInterface } from './user.interface';
-import { User, UserGroup } from '../../db/models';
-import { Connection } from '../../db/connections';
+import { User } from '../../db/models';
 
 export class UserService {
 
     getById = async (id: string) => {
         const user = await User.findOne({ where: { id: id } });
         if (user != null) {
+            return this.toUserInterface(user);
+        }
+        else {
+            return null;
+        }
+    }
+
+    getByLoginPassword = async (username: string, password: string) => {
+        const user = await User.findOne({ where: { login: username } });
+        if (user != null && user.password == password) {
             return this.toUserInterface(user);
         }
         else {
