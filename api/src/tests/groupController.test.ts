@@ -5,6 +5,7 @@ import { GroupController } from '../entities/group/group.controller';
 import { GroupInterface } from "../entities/group/group.interface";
 
 const notFoundError = createError(404);
+const error = new Error();
 
 const req: any = {
     body: {
@@ -37,6 +38,7 @@ const groupController = new GroupController(groupService);
 
 describe("GroupController", () => {
     afterEach(() => {
+        jest.resetModules();
         jest.clearAllMocks();
     });
 
@@ -61,6 +63,16 @@ describe("GroupController", () => {
             expect(next).toBeCalledTimes(1);
             expect(next).toHaveBeenCalledWith(notFoundError);
         })
+
+        it('should return Error in case of service error', async () => {
+            jest.spyOn(groupService, "getById").mockImplementation((id) => Promise.reject(error));
+
+            await groupController.getById(req, res, next);
+
+            expect(groupService.getById).toBeCalledTimes(1);
+            expect(next).toBeCalledTimes(1);
+            expect(next).toBeCalledWith(error);
+        });
     });
 
     describe("updateGroup", () => {
@@ -89,6 +101,20 @@ describe("GroupController", () => {
             expect(next).toBeCalledTimes(1);
             expect(next).toHaveBeenCalledWith(notFoundError);
         })
+
+        it('should return Error in case of service error', async () => {
+            const group = { id: req.params.id, ...req.body } as GroupInterface;
+
+            jest.spyOn(groupService, "getById").mockImplementation((id) => Promise.resolve(group));
+            jest.spyOn(groupService, "update").mockImplementation((group) => Promise.reject(error));
+
+            await groupController.updateGroup(req, res, next);
+
+            expect(groupService.getById).toBeCalledTimes(1);
+            expect(groupService.update).toBeCalledTimes(1);
+            expect(next).toBeCalledTimes(1);
+            expect(next).toBeCalledWith(error);
+        });
     });
 
     describe("createGroup", () => {
@@ -101,6 +127,16 @@ describe("GroupController", () => {
             expect(groupService.newGroup).toHaveBeenCalledTimes(1);
             expect(res.sendStatus).toBeCalledWith(200);
         })
+
+        it('should return Error in case of service error', async () => {
+            jest.spyOn(groupService, "newGroup").mockImplementation((group) => Promise.reject(error));
+
+            await groupController.createGroup(req, res, next);
+
+            expect(groupService.newGroup).toHaveBeenCalledTimes(1);
+            expect(next).toBeCalledTimes(1);
+            expect(next).toBeCalledWith(error);
+        });
     });
 
     describe("deleteGroup", () => {
@@ -128,11 +164,25 @@ describe("GroupController", () => {
             expect(next).toBeCalledTimes(1);
             expect(next).toHaveBeenCalledWith(notFoundError);
         })
+
+        it('should return Error in case of service error', async () => {
+            const group = { id: req.params.id, ...req.body } as GroupInterface;
+
+            jest.spyOn(groupService, "getById").mockImplementation((id) => Promise.resolve(group));
+            jest.spyOn(groupService, "hardDelete").mockImplementation((user) => Promise.reject(error));
+
+            await groupController.deleteGroup(req, res, next);
+
+            expect(groupService.getById).toBeCalledTimes(1);
+            expect(groupService.hardDelete).toBeCalledTimes(1);
+            expect(next).toBeCalledTimes(1);
+            expect(next).toBeCalledWith(error);
+        });
     });
 
     describe("getAll", () => {
         it('should get list of all groups', async () => {
-            const users = [{ id: req.params.id, ...req.body } as 
+            const users = [{ id: req.params.id, ...req.body } as
                 GroupInterface];
             jest.spyOn(groupService, "all").mockImplementation(() => Promise.resolve(users));
 
@@ -152,6 +202,16 @@ describe("GroupController", () => {
             expect(res.json).toHaveBeenCalledTimes(1);
             expect(res.json).toHaveBeenCalledWith([]);
         })
+
+        it('should return Error in case of service error', async () => {
+            jest.spyOn(groupService, "all").mockImplementation(() => Promise.reject(error));
+
+            await groupController.getAll(req, res, next);
+
+            expect(groupService.all).toBeCalledTimes(1);
+            expect(next).toBeCalledTimes(1);
+            expect(next).toBeCalledWith(createError(500, `Failed to get groups\n${error}`));
+        });
     });
 
     describe("addUsers", () => {
@@ -169,8 +229,6 @@ describe("GroupController", () => {
         });
 
         it('should return 404 error if no group found', async () => {
-            const group = { id: req.params.id, ...req.body } as GroupInterface;
-
             jest.spyOn(groupService, "getById").mockImplementation((id) => Promise.resolve(null));
             jest.spyOn(groupService, "addUsers").mockImplementation((groupId, users) => Promise.resolve());
 
@@ -181,5 +239,20 @@ describe("GroupController", () => {
             expect(next).toBeCalledTimes(1);
             expect(next).toBeCalledWith(notFoundError);
         });
+
+        it('should return Error in case of service error', async () => {
+            const group = { id: req.params.id, ...req.body } as GroupInterface;
+
+            jest.spyOn(groupService, "getById").mockImplementation((id) => Promise.resolve(group));
+            jest.spyOn(groupService, "addUsers").mockImplementation((groupId, users) => Promise.reject(error));
+
+            await groupController.addUsers(addUsersReq, res, next);
+
+            expect(groupService.getById).toBeCalledTimes(1);
+            expect(groupService.addUsers).toBeCalledTimes(1);
+            expect(next).toBeCalledTimes(1);
+            expect(next).toBeCalledWith(error);
+        });
+
     });
 });
