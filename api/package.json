@@ -37,7 +37,7 @@
     "express-joi-validation": "^4.0.4-beta.0",
     "http-errors": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
-    "pg": "^8.3.3",
+    "pg": "^8.18.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.3.4",
     "uuid": "^8.3.0",
