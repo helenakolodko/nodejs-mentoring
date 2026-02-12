@@ -17,6 +17,6 @@
     "nodemon": "2.0.4"
   },
   "dependencies": {
-    "csvtojson": "^2.0.10"
+    "csvtojson": "^2.0.13"
   }
 }
